@@ -91,5 +91,5 @@ Se a tool der erro por não achar a pasta da Skill (por exemplo, na Skill instal
 Vale para cartas de apresentação, perguntas abertas e campos livres:
 - **Idioma:** o mesmo do formulário. Em português, use acentuação e pontuação corretas.
 - **Voz:** primeira pessoa, natural e direta, em texto corrido sem negrito.
-- **Conteúdo:** quando couber, fale de crescimento profissional e aprendizado contínuo, e da conciliação entre trabalho e pesquisa (doutorado em andamento).
+- **Conteúdo:** quando couber, fale de crescimento profissional e aprendizado contínuo, e da formação acadêmica, sempre como ela aparece no currículo geral (grau, área e instituição).
 - **Fatos:** use somente fatos do currículo geral e do perfil, com os mesmos números, tecnologias e escopo de responsabilidade. Quando a pergunta pedir algo que não está nessas fontes, trate como bloqueio (passo 4).

@@ -24,7 +24,8 @@ _PRODUCTION = ("production", "deploy", "deployed", "deployment", "AWS", "Lambda"
 _ANALYSIS = ("analysis", "statistical", "experiment", "experiments", "A/B", "forecasting", "hypothesis",
              "regression", "insights")
 ROLE_FOCUS = {"ml_engineer": _PRODUCTION, "ai_engineer": _PRODUCTION, "data_engineer": _PRODUCTION,
-              "data_scientist": _ANALYSIS, "data_analyst": _ANALYSIS}
+              "data_scientist": _ANALYSIS, "data_analyst": _ANALYSIS,
+              "ai_analyst": _ANALYSIS, "operations_research": _ANALYSIS}
 
 
 def _count(text: str, terms: list[str]) -> int:

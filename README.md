@@ -1,5 +1,14 @@
 # mcp-vagas
 
+> **Este é um fork de [barbieriht/mcp-vagas](https://github.com/barbieriht/mcp-vagas)**, que fez todo o trabalho pesado (servidor MCP, painel, triagem, currículos, Skill). O que este fork acrescenta:
+>
+> - **Montagem no macOS numa pasta só, com Claude Code e Google Chrome** ([guia](docs/macos-pasta-de-vagas.md)): um script (`scripts/montar_pasta_macos.sh`) cria o ambiente Python, registra o MCP só naquela pasta, abre o painel sempre no Chrome e põe um `CLAUDE.md` com regras de segurança (um passo de cada vez; o Claude preenche os formulários, mas login, documentos e o envio ficam com você).
+> - **Skill `entrevista`**: prepara cada entrevista a partir da vaga e do currículo enviado, registra as perguntas feitas e mantém pitch, histórias STAR e um banco de perguntas ([modelos](modelos/pasta-de-vagas/)).
+> - **Dois cargos novos** na classificação de vagas e na triagem: `operations_research` (pesquisa operacional, otimização matemática) e `ai_analyst` (analista de IA).
+> - Pergunta de **disponibilidade para início** no modelo do perfil, e um texto genérico sobre formação acadêmica nas respostas abertas.
+>
+> Para Windows e Linux, ou para a instalação original, siga o restante deste README.
+
 Um assistente de candidaturas a vagas para o Claude. Você conversa com o Claude, e ele:
 
 - **busca vagas** na Gupy e no LinkedIn a partir dos cargos que você procura, descarta as que não servem e monta uma lista ordenada pela aderência ao seu currículo;

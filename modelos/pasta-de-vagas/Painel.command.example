@@ -1,0 +1,3 @@
+#!/bin/sh
+# Abre o painel de configuração do mcp-vagas (duplo clique no Finder).
+exec env BROWSER="__PASTA__/abrir-no-chrome.sh" VAGAS_DB="__PASTA__/dados/vagas.db" VAGAS_SKILL_DIR="__REPO__/skill/candidaturas" VAGAS_SALARY_POLICY="__REPO__/skill/candidaturas/politica-salarial.md" VAGAS_TRIAGE_CRITERIA="__REPO__/skill/candidaturas/criterios-triagem.md" VAGAS_RESUME_OUT="__PASTA__/curriculos" VAGAS_EXPORT_DIR="__PASTA__/exportacoes" VAGAS_AUTO_SUBMIT=nao "__PYTHON__" -m vagas.panel

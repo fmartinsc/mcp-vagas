@@ -11,7 +11,8 @@ Source = Literal["linkedin", "gupy", "indeed", "glassdoor", "outro"]
 WorkMode = Literal["remoto", "hibrido", "presencial"]
 
 # Estimativas salariais
-RoleKey = Literal["data_scientist", "ml_engineer", "ai_engineer", "data_engineer", "data_analyst", "outro"]
+RoleKey = Literal["data_scientist", "ml_engineer", "ai_engineer", "data_engineer", "data_analyst", "ai_analyst",
+                  "operations_research", "outro"]
 Seniority = Literal["estagio", "junior", "pleno", "senior", "especialista", "staff"]
 Currency = Literal["BRL", "USD", "EUR"]
 Period = Literal["hora", "mes", "ano"]
@@ -30,6 +31,8 @@ ROLE_NAMES: dict[str, tuple[str, str]] = {
     "ai_engineer": ("engenheiro de ia", "ai engineer"),
     "data_engineer": ("engenheiro de dados", "data engineer"),
     "data_analyst": ("analista de dados", "data analyst"),
+    "ai_analyst": ("analista de ia", "ai analyst"),
+    "operations_research": ("pesquisa operacional", "operations research"),
 }
 
 # Senioridade como se escreve nas buscas.

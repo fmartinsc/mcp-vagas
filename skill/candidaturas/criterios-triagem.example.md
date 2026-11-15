@@ -32,6 +32,8 @@ Listas separadas por vírgula. Maiúsculas, acentos e ponto final são ignorados
   - `ai_engineer`: engenheiro de IA, AI engineer
   - `data_engineer`: engenheiro de dados, data engineer
   - `data_analyst`: analista de dados, data analyst
+  - `ai_analyst`: analista de IA, AI analyst
+  - `operations_research`: pesquisa operacional, operations research (inclui otimização matemática)
 
   Cargo alvo segue na triagem. Cargo condicionado só segue com aderência igual ou maior que a mínima. Cargo reconhecido que não está em nenhuma das duas listas é descartado; título não reconhecido vai para o seu julgamento.
 - **Aderência mínima:** número inteiro de 0 a 100 (aceita `%`). Sem a linha, vale 50.

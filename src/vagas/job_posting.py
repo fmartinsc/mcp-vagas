@@ -53,7 +53,12 @@ _ROLES = [
     ("ml_engineer", r"(machine learning|\bml\b).*(engineer|engenh|\beng\b)|(engineer|engenh|\beng\b).*(machine learning|\bml\b)"
                     r"|\bmle\b|visao computacional|computer vision"),
     ("ai_engineer", r"\b(ai|llm|genai)\b.*engineer|(engenh|desenvolvedor|developer)\w*.*\b(ia|ai|inteligencia artificial)\b"),
+    # Pesquisa operacional antes de cientista de dados ("cientista de otimização" não é cientista de dados).
+    ("operations_research", r"pesquisa operacional|operations research|otimizacao matematica|mathematical optimization"
+                            r"|optimization scientist|cientista de otimizacao|especialista (em|de) otimizacao"),
     ("data_scientist", r"data scien|cientista (de )?dados|ciencia de dados"),
+    ("ai_analyst", r"(analista|analyst)\b.*\b(ia|ai|inteligencia artificial|genai|llm)\b"
+                   r"|\b(ai|genai|llm)\b.*\banalyst"),
     ("data_engineer", r"data engineer|engenheir\w*(\(a\))? de dados"),
     ("data_analyst", r"data analyst|analista de (dados|bi)\b|\bbi analyst"),
 ]
