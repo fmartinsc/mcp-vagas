@@ -31,7 +31,7 @@ O **mcp-vagas** junta tudo isso numa conversa com o [Claude](https://claude.ai).
 | 🗂️ **Organiza os processos** | Guarda cada candidatura, a etapa em que está (RH, entrevista técnica, proposta...), o que depende de você e quem não respondeu. Nunca se candidata duas vezes à mesma vaga. |
 | 🎤 **Prepara as entrevistas** | Monta o seu "fale sobre você", as suas histórias no formato STAR e, para cada entrevista, o que destacar e as perguntas prováveis. Depois, registra o que perguntaram para você ir melhorando. |
 
-## 💬 Como é usar
+## 💬 Como funciona na prática
 
 Você conversa com o Claude como conversaria com uma pessoa:
 
