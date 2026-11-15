@@ -1,181 +1,193 @@
-# mcp-vagas
+<div align="center">
 
-> **Este é um fork de [barbieriht/mcp-vagas](https://github.com/barbieriht/mcp-vagas)**, que fez todo o trabalho pesado (servidor MCP, painel, triagem, currículos, Skill). O que este fork acrescenta:
->
-> - **Montagem no macOS numa pasta só, com Claude Code e Google Chrome** ([guia](docs/macos-pasta-de-vagas.md)): um script (`scripts/montar_pasta_macos.sh`) cria o ambiente Python, registra o MCP só naquela pasta, abre o painel sempre no Chrome e põe um `CLAUDE.md` com regras de segurança (um passo de cada vez; o Claude preenche os formulários, mas login, documentos e o envio ficam com você).
-> - **Skill `entrevista`**: prepara cada entrevista a partir da vaga e do currículo enviado, registra as perguntas feitas e mantém pitch, histórias STAR e um banco de perguntas ([modelos](modelos/pasta-de-vagas/)).
-> - **Dois cargos novos** na classificação de vagas e na triagem: `operations_research` (pesquisa operacional, otimização matemática) e `ai_analyst` (analista de IA).
-> - Pergunta de **disponibilidade para início** no modelo do perfil, e um texto genérico sobre formação acadêmica nas respostas abertas.
->
-> Para Windows e Linux, ou para a instalação original, siga o restante deste README.
+# 🔎 mcp-vagas
 
-Um assistente de candidaturas a vagas para o Claude. Você conversa com o Claude, e ele:
+**Um assistente de busca de emprego que trabalha junto com você, no seu computador.**
 
-- **busca vagas** na Gupy e no LinkedIn a partir dos cargos que você procura, descarta as que não servem e monta uma lista ordenada pela aderência ao seu currículo;
-- **gera um currículo em PDF para cada vaga**, a partir do seu currículo geral, sem inventar nada (o servidor recusa números, tecnologias ou cargos que não estão no seu currículo);
-- **preenche os formulários** no navegador e para antes do envio, para você conferir;
-- **acompanha cada processo**: etapas, pendências, histórico e quem não respondeu.
+Ele procura vagas, diz quais combinam com você, monta um currículo para cada vaga,<br>
+preenche os formulários e ajuda a se preparar para as entrevistas.<br>
+**Quem decide e quem envia é sempre você.**
 
-Tudo roda no seu computador (um servidor MCP local e um banco SQLite): não há conta, nuvem nem assinatura. A configuração é feita num **painel no navegador**, sem editar arquivos.
+[Como começar](#-como-começar-no-mac) · [O que ele faz](#-o-que-ele-faz-por-você) · [Segurança](#-sua-privacidade-e-sua-segurança) · [Perguntas frequentes](#-perguntas-frequentes)
 
-## O que você precisa
+</div>
+
+---
+
+## 💡 A ideia
+
+Procurar emprego cansa: dezenas de sites, formulários que pedem as mesmas informações, um currículo que precisa ser ajustado para cada vaga e entrevistas para preparar.
+
+O **mcp-vagas** junta tudo isso numa conversa com o [Claude](https://claude.ai). Você pede em português, do seu jeito, e ele faz o trabalho repetitivo. Você não precisa saber programar: a instalação é copiar e colar dois comandos, e o resto se faz numa página de configuração e na conversa.
+
+## ✨ O que ele faz por você
 
 | | |
 |---|---|
-| Sistema | Windows (com ou sem WSL), Linux ou macOS (macOS ainda sem testes) |
-| Claude | [Claude Desktop](https://claude.ai/download) (Windows; no macOS, com o registro do MCP feito à mão) ou [Claude Code](https://code.claude.com/docs) (Windows, Linux e macOS) |
-| Para preencher formulários | Google Chrome (ou Edge) com a extensão [Claude in Chrome](https://code.claude.com/docs/en/chrome) |
-| Programas | [`uv`](https://docs.astral.sh/uv/) e Git. O `uv` baixa o Python 3.12 sozinho; não é preciso instalar Typst nem LaTeX |
+| 🔎 **Procura vagas** | Busca na Gupy e no LinkedIn pelos cargos que você quer, descarta as que não servem (cidade errada, senioridade errada, empresas que você quer evitar) e mostra uma lista da mais para a menos aderente ao seu perfil. |
+| 📄 **Monta o seu currículo geral** | Lê o PDF do seu currículo atual, organiza tudo e **pergunta** quando algo não bate (uma data, um cargo). Só passa a valer depois que você aprova. |
+| 🎯 **Faz um currículo para cada vaga** | A partir do currículo geral, gera um PDF com o que importa para aquela vaga. **Não inventa nada:** o sistema recusa números, tecnologias ou cargos que não estão no seu currículo. |
+| ✍️ **Preenche os formulários** | Abre a vaga no Google Chrome e preenche nome, contato, experiências, perguntas abertas e o anexo do currículo. **Para antes do botão de enviar** e mostra o que preencheu. |
+| 🗂️ **Organiza os processos** | Guarda cada candidatura, a etapa em que está (RH, entrevista técnica, proposta...), o que depende de você e quem não respondeu. Nunca se candidata duas vezes à mesma vaga. |
+| 🎤 **Prepara as entrevistas** | Monta o seu "fale sobre você", as suas histórias no formato STAR e, para cada entrevista, o que destacar e as perguntas prováveis. Depois, registra o que perguntaram para você ir melhorando. |
 
-## 1. Instalar
+## 💬 Como é usar
 
-### Windows (sem WSL)
+Você conversa com o Claude como conversaria com uma pessoa:
 
-No PowerShell:
+> **Você:** busque vagas de analista de dados para mim
+>
+> **Claude:** encontrei 23 vagas novas; 9 passaram nos seus critérios. As 3 mais aderentes são...
 
-```powershell
-winget install astral-sh.uv Git.Git          # se ainda não tiver; depois abra um PowerShell novo
-git clone https://github.com/barbieriht/mcp-vagas.git $HOME\projects\mcp-vagas
-cd $HOME\projects\mcp-vagas
-uv run --no-project -p 3.12 scripts\instalar_desktop.py --sem-skill    # Claude Desktop e extensão do Chrome
-uv run --no-project -p 3.12 scripts\instalar_claude_code.py            # opcional: Claude Code
-```
+> **Você:** candidate-se à primeira da lista
+>
+> **Claude:** preenchi o formulário e anexei um currículo feito para essa vaga. Revise abaixo o que coloquei. Posso enviar?
 
-### Linux ou macOS
+> **Você:** passei para a entrevista com o gestor, me prepara
+>
+> **Claude:** pela descrição da vaga, vale destacar... Separei 3 histórias suas que respondem aos requisitos e 6 perguntas prováveis. Quer ensaiar?
 
-No terminal:
+Também há atalhos: `/search-jobs` (buscar), `/work-list` (lista do que vale aplicar), `/apply <link>` (candidatar), `/pending` (o que depende de você) e `/entrevista`.
 
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh     # se ainda não tiver o uv (no macOS também: brew install uv)
-git clone https://github.com/barbieriht/mcp-vagas.git ~/projects/mcp-vagas
-cd ~/projects/mcp-vagas
-python3 scripts/instalar_claude_code.py             # Claude Code, Skill, comandos e extensão do Chrome
-```
+## 🚀 Como começar (no Mac)
 
-No Linux, para guardar CPF e RG com segurança, instale também o chaveiro do sistema: `sudo apt install libsecret-tools` (ou o equivalente da sua distribuição).
+Leva uns 15 minutos, uma vez só.
 
-### Windows com WSL
+### Antes de tudo, você vai precisar de
 
-No terminal do WSL, com o `uv` instalado no Linux:
+- Um **Mac**.
+- O **[Google Chrome](https://www.google.com/chrome/)**.
+- Uma **assinatura paga do Claude** (Pro ou superior), com o **[app do Claude](https://claude.ai/download)** instalado.
+- A extensão **[Claude in Chrome](https://code.claude.com/docs/en/chrome)** no Chrome, conectada à mesma conta do Claude. É ela que deixa o Claude preencher os formulários.
+- O **PDF do seu currículo atual**.
 
-```bash
-git clone https://github.com/barbieriht/mcp-vagas.git ~/projects/mcp-vagas
-cd ~/projects/mcp-vagas
-python3 scripts/instalar_desktop.py --sem-skill     # Claude Desktop (Windows) e extensão do Chrome
-python3 scripts/instalar_claude_code.py             # opcional: Claude Code no WSL
-```
+### Passo 1 — Abra o Terminal
 
-**O que os instaladores fazem:** instalam uma cópia estável do servidor, registram o MCP "vagas" no Claude Desktop e/ou no Claude Code, instalam a Skill "candidaturas" e os comandos e registram a extensão do Chrome. No fim, criam o atalho **Painel do mcp-vagas** e abrem o painel de configuração no navegador. Podem ser rodados de novo a qualquer momento. O `--sem-skill` deixa o zip da Skill do Desktop para depois da configuração (passo 2), e o `--sem-painel` não abre o painel.
+O Terminal é um programa que já vem no Mac. Aperte **Cmd + Espaço**, digite `Terminal` e aperte **Enter**. Vai abrir uma janela com texto: é ali que você cola os comandos abaixo.
 
-## 2. Configurar (painel no navegador)
+### Passo 2 — Instale o ajudante de Python
 
-O instalador já abre o painel. Para voltar a ele depois, use o atalho **Painel do mcp-vagas** ou peça ao Claude *"abra o painel de configuração"* (ele manda o link). Também dá para abrir pelo terminal:
-
-| Sistema | Atalho | Comando |
-|---|---|---|
-| Windows (com ou sem WSL) | Área de Trabalho | `& "$env:LOCALAPPDATA\vagas\venv\Scripts\python.exe" -m vagas.panel` (sem WSL) |
-| Linux | menu de aplicativos | `~/.local/share/vagas/venv/bin/python -m vagas.panel` |
-| macOS | Mesa (arquivo `.command`) | `~/.local/share/vagas/venv/bin/python -m vagas.panel` |
-| WSL (só Claude Code) | o do `instalar_desktop.py` | `~/.local/share/vagas/venv/bin/python -m vagas.panel` |
-
-O painel é uma página no navegador. Preencha e clique em **Salvar tudo**. Nada é gravado enquanto houver um campo com erro, e o erro aparece ao lado do campo.
-
-| Seção | O que preencher |
-|---|---|
-| **Pastas e opções** | onde salvar os PDFs dos currículos (escolha uma pasta que o navegador alcance, como `Documentos\Curriculos`), o PDF do seu currículo atual e o link do seu perfil do LinkedIn |
-| **Perfil para formulários** | contato, idiomas, respostas padrão (disponibilidade, contratação PJ, diversidade...) e portfólio |
-| **Critérios de triagem** | cargos que você procura, senioridades, cidades e estados aceitos para vagas presenciais, empresas a evitar |
-| **Política salarial** | o mínimo (e, se quiser, o máximo) por faixa: remoto, híbrido em uma cidade, internacional... |
-| **Documentos do cofre** | CPF, RG e outros documentos, cifrados no seu computador. A extensão do Chrome os preenche nos formulários, e o Claude nunca vê os valores |
-
-O painel só aceita conexões do seu computador e só abre pelo link com o código de acesso (o atalho, o comando e o Claude dão esse link). Ele fecha sozinho depois de uma hora sem uso; o atalho abre de novo. Preferir editar os arquivos à mão também funciona: veja [Arquivos pessoais à mão](docs/referencia.md#arquivos-pessoais-à-mão).
-
-**Claude Desktop:** depois de salvar, gere o zip da Skill, rodando o instalador de novo sem o `--sem-skill`. Em seguida, envie `Downloads\candidaturas.zip` em **Configurações → Skills** e reinicie o Desktop (feche também pelo ícone perto do relógio).
-
-## 3. Montar o seu currículo geral (uma vez)
-
-O currículo geral é a base de todos os currículos personalizados: nada fora dele entra num currículo de vaga.
-
-1. Faça login no LinkedIn para o leitor do seu perfil (uma vez; a senha não passa pelo código):
-   ```bash
-   ~/.local/share/vagas/venv/bin/python -m vagas.linkedin login
-   ```
-   No Windows sem WSL: `& "$env:LOCALAPPDATA\vagas\venv\Scripts\python.exe" -m vagas.linkedin login`.
-2. Peça ao Claude: *"Monte meu currículo geral"*. Ele usa o PDF e o LinkedIn configurados no painel e pergunta quando as fontes divergem.
-3. Revise o rascunho no painel, na seção **Currículo geral**: edite o que quiser e clique em **Salvar tudo**.
-4. Ainda na seção, confira o que muda e o que não aparece no PDF nem no LinkedIn, e clique em **Aprovar o rascunho**. Pela conversa também dá: diga ao Claude *"pode aprovar"*.
-
-Para atualizar depois (emprego novo, curso novo), peça *"atualize meu currículo geral"* e aprove de novo.
-
-## 4. Preparar o navegador (para preencher formulários)
-
-1. Instale a extensão [Claude in Chrome](https://code.claude.com/docs/en/chrome) e entre com a mesma conta do Claude.
-2. Carregue a extensão do mcp-vagas, que anexa o currículo certo e preenche os documentos do cofre e os termos de uso: abra `chrome://extensions`, ligue o **Modo do desenvolvedor**, clique em **Carregar sem compactação** e escolha a pasta:
-   - Windows (com ou sem WSL): `%LOCALAPPDATA%\vagas\extensao`
-   - Linux e macOS: a pasta `extension/` do repositório
-3. No Windows, use o **Claude Desktop** para as candidaturas (no WSL, o Claude Code não conecta ao navegador). No Linux e no macOS, use o Claude Code com `claude --chrome`. Para o Claude Desktop no macOS, o registro do MCP é manual: veja [Instalação manual nos clientes](docs/referencia.md#instalação-manual-nos-clientes).
-
-Na primeira vez de cada empresa, a extensão mostra o que vai preencher e pede a sua confirmação.
-
-## 5. Usar no dia a dia
-
-Peça em linguagem natural ou use os comandos:
-
-| Você quer | Peça ao Claude |
-|---|---|
-| achar vagas novas | `/search-jobs` ou *"busque vagas para mim"* |
-| ver o que vale a pena aplicar | `/work-list` (da maior para a menor aderência) |
-| saber se uma vaga serve | `/screen <link da vaga>` |
-| candidatar-se | `/apply <link da vaga>` ou *"candidate-se às 5 primeiras da lista"* |
-| ver o que depende de você | `/pending` |
-| contar uma novidade | *"passei para a entrevista técnica da Acme"* |
-| levar tudo para uma planilha | `/export-applications` |
-
-Para ver todas as vagas de uma vez, com filtros (status, site, data, aderência), contagens e o histórico de cada uma, abra o painel na aba **Vagas**. Lá também dá para mudar a etapa, anotar, descartar várias vagas de uma vez e reabrir uma descartada por engano. Na aba **Buscas** ficam as buscas feitas e as buscas em lote (com o andamento), e cada uma leva às vagas que trouxe.
-
-O Claude nunca envia uma candidatura sem a sua confirmação; o envio automático é opcional e vem desligado (painel → Pastas e opções → Envio automático). Ele também nunca se candidata duas vezes à mesma vaga, mesmo vinda de outro site.
-
-## Atualizar
+Copie a linha abaixo, cole no Terminal (**Cmd + V**) e aperte **Enter**:
 
 ```bash
-cd ~/projects/mcp-vagas && git pull      # no Windows: cd $HOME\projects\mcp-vagas; git pull
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Depois, rode de novo os instaladores do passo 1 e abra uma conversa nova. No Claude Desktop, reenvie o zip da Skill se ela mudou, e na extensão do Chrome clique em recarregar.
+Quando terminar, **feche o Terminal e abra de novo**.
 
-## Problemas comuns
+### Passo 3 — Baixe e monte a sua pasta de vagas
 
-| Problema | O que fazer |
-|---|---|
-| O painel diz "Acesso negado" | Abra pelo atalho, ou peça o link ao Claude: o link tem um código de acesso, e uma aba antiga pode ser de um painel que já fechou |
-| O instalador parou ao gerar o zip da Skill | Os arquivos pessoais ainda não estão preenchidos: preencha no painel (passo 2) e rode o instalador de novo |
-| O Claude Desktop não mostra o "vagas" | Feche o Desktop por completo (inclusive pelo ícone perto do relógio) e abra de novo. Se continuar, veja o log em **Configurações → Desenvolvedor** e rode o instalador de novo |
-| O LinkedIn pediu login ou verificação | Rode o comando de login do passo 3 e tente de novo |
-| A extensão não preencheu nada | Recarregue a extensão em `chrome://extensions`. O ícone dela mostra **!** com o motivo quando algo falha |
-| Linux: "não tem onde guardar o cofre" | Instale o `secret-tool` (`sudo apt install libsecret-tools`) com um chaveiro ativo (GNOME Keyring ou KWallet) |
-| Rede corporativa: erro de certificado ao baixar | Rode os instaladores com `UV_SYSTEM_CERTS=1` (no PowerShell: `$env:UV_SYSTEM_CERTS=1`), para o `uv` usar os certificados do sistema |
+Cole esta linha e aperte **Enter**:
 
-## Privacidade e segurança
+```bash
+git clone https://github.com/fmartinsc/mcp-vagas.git ~/vagas/mcp-vagas && sh ~/vagas/mcp-vagas/scripts/montar_pasta_macos.sh
+```
 
-- Tudo fica no seu computador: banco, configuração, currículos e PDFs. Os seus arquivos pessoais ficam fora do git.
-- CPF, RG e os outros documentos ficam num cofre cifrado: pela DPAPI no Windows e pelo chaveiro do sistema no Linux. Quem os preenche é a extensão do Chrome, com a sua confirmação; o Claude nunca vê os valores. No macOS ainda não há cofre, então os documentos você digita.
-- O leitor do LinkedIn lê só o **seu** perfil, só quando você pede, e para diante de login ou verificação, sem técnicas de disfarce. Respeite os termos de uso de cada site; automatizar o LinkedIn é por sua conta e risco.
+> Se o Mac perguntar se quer instalar as "ferramentas de linha de comando", clique em **Instalar**, espere terminar e cole a linha de novo.
 
-## Limitações
+Isso cria uma pasta chamada **vagas** na sua pasta pessoal, com tudo dentro. No fim, aparece **Pronto** e os próximos passos.
 
-- A busca automática cobre Gupy e LinkedIn. Indeed e Glassdoor bloqueiam a leitura automática, então nesses sites a busca é feita pelo navegador.
-- O foco são vagas no Brasil, e os textos da Skill estão em português. O currículo geral e os currículos personalizados são em inglês.
-- macOS ainda não foi testado e não tem cofre de documentos.
+### Passo 4 — Preencha a configuração
 
-## Mais detalhes
+No Finder, abra a pasta **vagas** e dê **dois cliques em `Painel.command`**. Abre uma página no Chrome onde você preenche, sem mexer em arquivo nenhum:
 
-- [Referência](docs/referencia.md): configuração completa e variáveis de ambiente, instalação manual, leitor do LinkedIn, Skill, tools do MCP, funcionamento do cofre e da extensão, e desenvolvimento.
-- [Decisões de arquitetura](docs/adr/) e [issues](https://github.com/barbieriht/mcp-vagas/issues).
+- o PDF do seu currículo e o link do seu LinkedIn;
+- seus dados de contato e as respostas que todo formulário pede;
+- os cargos que você procura, as cidades e as empresas que quer evitar;
+- a sua pretensão salarial.
 
-## Contribuindo
+Clique em **Salvar tudo**.
 
-Sugestões e correções são bem-vindas. Abra uma [issue](https://github.com/barbieriht/mcp-vagas/issues) antes de um PR grande. O projeto segue TDD e as convenções do [CLAUDE.md](CLAUDE.md); rode `.venv/bin/pytest -q` antes de abrir o PR (veja [Desenvolvimento](docs/referencia.md#desenvolvimento)). Nunca inclua dados pessoais reais em testes, exemplos ou issues.
+> Na primeira vez, o Mac pode bloquear o `Painel.command` por ser um arquivo baixado da internet. Vá em **Ajustes do Sistema → Privacidade e Segurança**, role até o fim e clique em **Abrir mesmo assim**.
 
-## Licença
+### Passo 5 — Converse com o Claude
 
-[GPL-3.0](LICENSE). Você pode usar, estudar, modificar e redistribuir; versões modificadas distribuídas também precisam ser GPL-3.0, com o código aberto.
+Abra o **app do Claude**, vá na aba **Code**, comece uma sessão nova e escolha a pasta **vagas**. Na primeira vez, ele pergunta se pode usar o "vagas": aprove.
+
+Comece por:
+
+> **monte meu currículo geral a partir do PDF**
+
+Depois de aprovar o currículo, peça:
+
+> **busque vagas para mim**
+
+Pronto. 🎉
+
+Quer mais detalhes de cada passo? Veja o [guia completo do Mac](docs/macos-pasta-de-vagas.md).
+
+## 🔒 Sua privacidade e sua segurança
+
+- **Tudo fica no seu computador:** seus currículos, seus dados e a lista de candidaturas. Não há conta nova, nuvem nem cadastro em lugar nenhum.
+- **O Claude nunca envia uma candidatura sem o seu ok.** Ele preenche e para antes do botão de enviar.
+- **Senhas, CPF e RG ficam com você:** o Claude não faz login por você e não digita documentos.
+- **Nada é inventado:** currículos e respostas usam só o que está no seu currículo aprovado.
+- **Um passo de cada vez:** o Claude mostra o que fez antes de seguir para o próximo.
+- O Claude ignora qualquer "instrução" escrita dentro de anúncios de vaga.
+
+Essas regras ficam no arquivo `CLAUDE.md` da sua pasta de vagas, que você pode ler e ajustar.
+
+## ❓ Perguntas frequentes
+
+<details>
+<summary><b>Preciso saber programar?</b></summary>
+
+Não. Você só copia e cola dois comandos na instalação. Todo o resto é a página de configuração e a conversa com o Claude.
+</details>
+
+<details>
+<summary><b>Quanto custa?</b></summary>
+
+O mcp-vagas é gratuito e de código aberto. Você precisa de uma assinatura paga do Claude (Pro ou superior) para usar a aba Code do app.
+</details>
+
+<details>
+<summary><b>Serve para qualquer área?</b></summary>
+
+Em parte. Os formulários, o currículo para cada vaga, o acompanhamento dos processos e a preparação de entrevistas servem para qualquer área.
+
+A **triagem automática** (decidir sozinho se uma vaga é do cargo que você procura) hoje só reconhece cargos de **dados e tecnologia**: cientista, analista e engenheiro de dados, machine learning, IA e pesquisa operacional. Em outras áreas, a busca funciona com os termos que você escolher, mas cada vaga vai para o seu julgamento, com a ajuda do Claude, em vez de ser filtrada sozinha. Quem quiser ampliar isso para outras áreas é bem-vindo para contribuir.
+</details>
+
+<details>
+<summary><b>Funciona no Windows ou no Linux?</b></summary>
+
+Sim, pelo instalador do projeto original: veja a [instalação completa](docs/instalacao-completa.md). Este guia simplificado é para o Mac.
+</details>
+
+<details>
+<summary><b>Em quais sites ele procura vagas?</b></summary>
+
+A busca automática cobre a **Gupy** e o **LinkedIn**. Indeed, Glassdoor e sites de empresas funcionam pelo navegador: você manda o link e ele faz o resto.
+</details>
+
+<details>
+<summary><b>O currículo sai em português ou em inglês?</b></summary>
+
+Os currículos gerados saem em inglês. As conversas, a configuração e as respostas aos formulários seguem o idioma de cada formulário.
+</details>
+
+<details>
+<summary><b>E se eu quiser parar de usar?</b></summary>
+
+Apague a pasta **vagas**. Nada fica instalado fora dela.
+</details>
+
+## 🙏 Créditos
+
+Este projeto é um fork do **[mcp-vagas de barbieriht](https://github.com/barbieriht/mcp-vagas)**, que criou todo o motor: busca, triagem, currículos, painel e acompanhamento. Este fork acrescenta:
+
+- a **montagem simplificada no Mac**, numa pasta só, com o Google Chrome e regras de segurança prontas;
+- o **assistente de entrevistas** (skill `entrevista`);
+- dois cargos novos na triagem: pesquisa operacional e analista de IA.
+
+## 🛠️ Para quem é técnico
+
+- [Instalação completa](docs/instalacao-completa.md) (Windows, Linux, macOS; Claude Desktop e Claude Code)
+- [Guia detalhado do Mac](docs/macos-pasta-de-vagas.md)
+- [Referência](docs/referencia.md): configuração, variáveis de ambiente, tools do MCP, desenvolvimento
+- [Decisões de arquitetura](docs/adr/)
+
+## 📜 Licença
+
+[GPL-3.0](LICENSE): você pode usar, estudar, modificar e redistribuir. Versões modificadas distribuídas também precisam ser GPL-3.0, com o código aberto.

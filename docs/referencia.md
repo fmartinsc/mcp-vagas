@@ -1,6 +1,6 @@
 # Referência do mcp-vagas
 
-Detalhes para quem quer entender, ajustar ou desenvolver o mcp-vagas. Para instalar e usar, siga o [README](../README.md).
+Detalhes para quem quer entender, ajustar ou desenvolver o mcp-vagas. Para instalar e usar, siga o [README](../README.md) (Mac) ou a [instalação completa](instalacao-completa.md) (Windows, Linux e Mac).
 
 - [Configuração completa](#configuração-completa)
 - [Instalação manual nos clientes](#instalação-manual-nos-clientes)

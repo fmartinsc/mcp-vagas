@@ -2,7 +2,7 @@
 
 Este guia monta o mcp-vagas no macOS de um jeito fechado numa única pasta (aqui, `~/vagas`): o ambiente Python, o banco, os currículos, as Skills e o registro do MCP ficam todos ali, e nada é instalado para o sistema inteiro. É o jeito usado neste fork, testado no macOS com o Claude Code.
 
-Diferenças em relação ao instalador do [README](../README.md):
+Diferenças em relação à [instalação completa](instalacao-completa.md):
 
 | | Instalador do README | Pasta de vagas (este guia) |
 |---|---|---|
@@ -80,6 +80,10 @@ Dê duplo clique em `~/vagas/Painel.command` (na primeira vez, o macOS pode pedi
 Esses arquivos pessoais ficam em `mcp-vagas/skill/candidaturas/` e o git os ignora: não vão para nenhum repositório.
 
 ## 4. Abrir o Claude Code na pasta
+
+Pelo **app do Claude** (o mais simples): abra o app, vá na aba **Code**, comece uma sessão nova e escolha a pasta `vagas` da sua pasta pessoal.
+
+Ou pelo Terminal:
 
 ```bash
 cd ~/vagas && claude --chrome
